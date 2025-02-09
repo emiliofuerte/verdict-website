@@ -1,0 +1,21 @@
+<!-- newsletter/templates/newsletter/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Newsletter{% endblock %}</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{% url 'current_issue' %}">Current Issue</a></li>
+            <li><a href="{% url 'past_issues' %}">Past Issues</a></li>
+            <li><a href="{% url 'submissions' %}">Submissions</a></li>
+            <li><a href="{% url 'join_our_team' %}">Join Our Team</a></li>
+            <li><a href="{% url 'about_us' %}">About Us</a></li>
+        </ul>
+    </nav>
+    <hr>
+    {% block content %}{% endblock %}
+</body>
+</html>
