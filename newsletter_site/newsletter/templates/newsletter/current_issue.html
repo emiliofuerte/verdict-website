@@ -1,9 +1,17 @@
-<!-- newsletter/templates/newsletter/current_issue.html -->
-{% extends 'newsletter/base.html' %}
-
-{% block title %}Current Issue{% endblock %}
-
+{% extends "newsletter/base.html" %}
+{% block title %}Home{% endblock %}
 {% block content %}
-  <h1>the columbia law verdict 🌱</h1>
-  <p>Welcome to the latest edition of our newsletter.</p>
+
+  {% for issue_number, articles_in_issue in grouped_issues %}
+    <p style="text-align: center; color: #9b9b9b;">issue {{ issue_number }}</p>
+    <ul class="list-unstyled">
+      {% for article in articles_in_issue %}
+        <li>
+          <a href="{% url 'show_article' article.id %}" class="text-decoration-none">
+            {{ article.title }} (by {{ article.writer }})
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
 {% endblock %}

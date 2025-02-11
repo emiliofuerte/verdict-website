@@ -1,21 +1,81 @@
-<!-- newsletter/templates/newsletter/base.html -->
+{% load static %} 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}Newsletter{% endblock %}</title>
+  <meta charset="UTF-8">
+  <title>VERDICT</title>
+  <!-- Bootstrap CSS (via CDN or local) -->
+  <link 
+    rel="stylesheet" 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  >
+  <style>
+    body {
+      font-family: "Times New Roman", Times, serif;
+      background-color: #fffff2; /* the off-white you mentioned */
+    }
+    /* Make all links black and underlined */
+    a, a:hover, a:active, a:visited {
+      color: black;
+      text-decoration: underline;
+    }
+    /* Example spacing overrides if needed */
+    .content-container {
+      margin: 2rem auto; /* adjusts top/bottom margin */
+      max-width: 800px;  /* controls the line length for readability */
+    }
+    .navbar-nav .nav-link {
+      color: black;
+    }
+    h1 {
+    text-align: center;
+    color: #3d4067;
+    }
+    h2 {
+    color: #9b9b9b;
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="{% url 'current_issue' %}">Current Issue</a></li>
-            <li><a href="{% url 'past_issues' %}">Past Issues</a></li>
-            <li><a href="{% url 'submissions' %}">Submissions</a></li>
-            <li><a href="{% url 'join_our_team' %}">Join Our Team</a></li>
-            <li><a href="{% url 'about_us' %}">About Us</a></li>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-md navbar-light py-2" style="background-color: #fffff2;">
+    <div class="container justify-content-center"> 
+      <!-- Brand with updated color and italics -->
+      <a class="navbar-brand mx-3" href="{% url 'current_issue' %}" style="color: rgb(133, 114, 108); font-style: italic; font-size: 1.5rem;">
+        THE COLUMBIA LAW VERDICT
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav text-center">
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url 'past_issues' %}">PAST ISSUES</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url 'submissions' %}">SUBMISSIONS</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url 'join_our_team' %}">JOIN OUR TEAM</a>
+          </li>
+          <li class="nav-item mx-2">
+            <a class="nav-link" href="{% url 'about_us' %}">ABOUT US</a>
+          </li>
         </ul>
-    </nav>
-    <hr>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE CONTENT -->
+  <div class="content-container">
     {% block content %}{% endblock %}
+  </div>
+
+  <!-- Bootstrap JS (via CDN or local) -->
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
 </body>
 </html>

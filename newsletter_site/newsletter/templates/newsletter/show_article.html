@@ -1,0 +1,10 @@
+{% extends "newsletter/base.html" %}
+{% block title %}{{ article.title }}{% endblock %}
+{% block content %}
+  <h1>{{ article.title }}</h1>
+  <p><strong>Writer:</strong> {{ article.writer }}</p>
+  <p><strong>Date:</strong> {{ article.date }}</p>
+  <p><strong>Issue:</strong> {{ article.issue_number }}</p>
+  <p><strong>Type:</strong> {{ article.article_type }}</p>
+  <div>{{ article.content_html|safe }}</div>
+{% endblock %}

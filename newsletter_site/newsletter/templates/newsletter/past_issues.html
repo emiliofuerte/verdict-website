@@ -1,9 +1,16 @@
-<!-- newsletter/templates/newsletter/past_issues.html -->
-{% extends 'newsletter/base.html' %}
-
+{% extends "newsletter/base.html" %}
 {% block title %}Past Issues{% endblock %}
-
 {% block content %}
-  <h1>Past Issues</h1>
-  <p>Browse our previous newsletters.</p>
+  <h1>past issues</h1>
+
+  {% for issue_number, articles_in_issue in grouped_issues %}
+    <h2>issue {{ issue_number }}</h2>
+    <ul>
+      {% for article in articles_in_issue %}
+        <li>
+          <a href="{% url 'show_article' article.id %}">{{ article.title }} (by {{ article.writer }})</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
 {% endblock %}
