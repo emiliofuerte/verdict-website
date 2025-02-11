@@ -1,17 +1,37 @@
 {% extends "newsletter/base.html" %}
+{% load static %}
 {% block title %}Home{% endblock %}
 {% block content %}
 
-  {% for issue_number, articles_in_issue in grouped_issues %}
-    <p style="text-align: center; color: #9b9b9b;">issue {{ issue_number }}</p>
-    <ul class="list-unstyled">
-      {% for article in articles_in_issue %}
-        <li>
-          <a href="{% url 'show_article' article.id %}" class="text-decoration-none">
-            {{ article.title }} (by {{ article.writer }})
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+<!-- Insert your top artwork -->
+<div class="text-center mb-4">
+  <!-- If "jgh_artwork.png" is placed in 'static/newsletter/' -->
+  <img 
+    src="{% static 'newsletter/jgh_artwork.png' %}" 
+    class="img-fluid" 
+    alt="JGH Artwork"
+    style="max-height: 150px;"
+  >
+</div>
+
+{% for volume, issues in grouped_volumes %}
+  {% for issue_num, articles_in_issue in issues %}
+    <p style="color:#9b9b9b;text-align: center;">volume {{ volume }}, issue {{ issue_num }}</p>
+    {% for article in articles_in_issue %}
+      <div class="mb-4">
+        <!-- Big Title -->
+        <h8 >{{ article.title }}</h8>
+        <!-- Writer in gray -->
+        <div style="color: #666;">
+          by {{ article.writer }}
+        </div>
+        <!-- Preview text -->
+        <p>{{ article.preview_text|linebreaks }}</p>
+        <!-- Link to full article -->
+        <a href="{{ article.get_absolute_url }}">Read More...</a>
+      </div>
+    {% endfor %}
   {% endfor %}
+{% endfor %}
+
 {% endblock %}

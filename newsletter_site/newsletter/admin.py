@@ -58,11 +58,33 @@ class ArticleAdmin(admin.ModelAdmin):
     list_display = (
         "title",
         "writer",
+        "volume_number",
         "issue_number",
         "article_type",
         "is_current_issue",
         "updated_at",
     )
-    list_editable = ("issue_number", "is_current_issue")
-    search_fields = ("title", "writer")
+    list_editable = ("volume_number", "issue_number", "is_current_issue")
+    search_fields = ("title", "writer", "short_title")
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'title', 
+                'short_title',
+                'writer', 
+                'preview_text',
+                'date', 
+                'article_type',
+                'volume_number', 
+                'issue_number',
+                'is_current_issue',
+            )
+        }),
+        ("Google Doc Info", {
+            'classes': ('collapse',),
+            'fields': ('doc_url', 'doc_id', 'content_html'),
+        }),
+    )
+
     actions = [mark_as_current, mark_as_past, fetch_doc_and_metadata]
