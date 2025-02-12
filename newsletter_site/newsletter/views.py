@@ -24,19 +24,31 @@ def current_issue(request):
     return render(request, 'newsletter/current_issue.html', context)
 
 def past_issues(request):
+    # 1. Grab all articles with is_current_issue=False
+    #    Sort by volume desc, then issue desc, then title
     articles = Article.objects.filter(is_current_issue=False).order_by(
         "-volume_number", "-issue_number", "title"
     )
+    
+    # 2. Group them by volume_number, then by issue_number
     grouped = defaultdict(lambda: defaultdict(list))
     for a in articles:
         grouped[a.volume_number][a.issue_number].append(a)
 
+    # 3. Sort volumes in descending order
     sorted_volumes = sorted(grouped.keys(), reverse=True)
+
+    # 4. Create a list of (volume_number, [(issue_number, [articles]), ...])
+    grouped_volumes = []
+    for vol_num in sorted_volumes:
+        issues_dict = grouped[vol_num]
+        # Sort the issues in descending order too
+        sorted_issues = sorted(issues_dict.items(), key=lambda x: x[0], reverse=True)
+        grouped_volumes.append((vol_num, sorted_issues))
+
+    # 5. Send grouped_volumes to the template
     context = {
-        "grouped_volumes": [
-            (v, sorted(grouped[v].items(), key=lambda x: x[0], reverse=True))
-            for v in sorted_volumes
-        ]
+        "grouped_volumes": grouped_volumes
     }
     return render(request, 'newsletter/past_issues.html', context)
 

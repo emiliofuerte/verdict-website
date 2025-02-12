@@ -1,16 +1,29 @@
 {% extends "newsletter/base.html" %}
 {% block title %}Past Issues{% endblock %}
-{% block content %}
-  <h1>past issues</h1>
 
-  {% for issue_number, articles_in_issue in grouped_issues %}
-    <h2>issue {{ issue_number }}</h2>
-    <ul>
-      {% for article in articles_in_issue %}
-        <li>
-          <a href="{% url 'show_article' article.id %}">{{ article.title }} (by {{ article.writer }})</a>
-        </li>
-      {% endfor %}
-    </ul>
+{% block content %}
+<h1>past issues</h1>
+
+  {% for volume_number, issues in grouped_volumes %}
+    <h2>volume {{ volume_number }}</h2> <br>
+
+    {% for issue_number, articles_in_issue in issues %}
+      {% with issue_date=articles_in_issue.0.date %}
+        <p>
+          issue {{ issue_number }}
+          {% if issue_date %}| {{ issue_date|date:"F j, Y"|lower }}{% endif %}
+        </p>
+      {% endwith %}
+      <ul>
+        {% for article in articles_in_issue %}
+          <li>
+            <a href="{% url 'show_article' article.id %}">
+              {{ article.title }} (by {{ article.writer }})
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+      <br>
+    {% endfor %}
   {% endfor %}
 {% endblock %}
