@@ -4,7 +4,6 @@ import re
 from django.conf import settings
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
-
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
@@ -21,10 +20,34 @@ DATE_REGEX = re.compile(r"^Date:\s*(.+)$", re.IGNORECASE)
 ISSUE_REGEX = re.compile(r"^Issue:\s*(\d+)$", re.IGNORECASE)
 TYPE_REGEX = re.compile(r"^Type of Article:\s*(.+)$", re.IGNORECASE)
 
+def strip_gdoc_html(raw_html: str) -> str:
+    """
+    Removes top-level <html>, <head>, <body>, <meta>, and inline style
+    attributes from a Google Docs export, so it won't override our
+    site's layout. 
+    """
+    # Remove DOCTYPE if present
+    raw_html = re.sub(r'<!DOCTYPE.*?>', '', raw_html, flags=re.IGNORECASE)
+
+    # Remove entire <html> and <head> tags
+    raw_html = re.sub(r'</?(html|head)\b[^>]*>', '', raw_html, flags=re.IGNORECASE)
+
+    # Remove <meta ...> tags
+    raw_html = re.sub(r'<meta[^>]*>', '', raw_html, flags=re.IGNORECASE)
+
+    # Extract everything inside the <body>...</body>, removing the body tags themselves
+    raw_html = re.sub(r'<body\b[^>]*>(.*?)</body>', r'\1', raw_html, flags=re.IGNORECASE|re.DOTALL)
+
+    # Remove inline style attributes (which often force background/width)
+    raw_html = re.sub(r'style="[^"]*"', '', raw_html, flags=re.IGNORECASE)
+
+    return raw_html.strip()
+
+
 def fetch_doc_and_parse_metadata(file_id: str):
     """
-    Export doc as HTML and attempt to parse top lines for metadata.
-    Returns (metadata_dict, full_html).
+    Export a Google Doc as HTML, parse the top lines for metadata,
+    and return (metadata_dict, cleaned_html).
     metadata_dict keys: title, writer, date, issue_number, article_type
     """
     credentials = service_account.Credentials.from_service_account_file(
@@ -54,9 +77,8 @@ def fetch_doc_and_parse_metadata(file_id: str):
         'article_type': ''
     }
 
-    # 3. Extract the first ~5 paragraphs
+    # 3. Extract the first ~5 paragraphs to parse Title, Writer, etc.
     paragraphs = re.split(r"</p>\s*<p[^>]*>", exported, maxsplit=5)
-
     text_lines = []
     for p in paragraphs[:6]:
         # remove remaining HTML tags
@@ -65,7 +87,7 @@ def fetch_doc_and_parse_metadata(file_id: str):
         for line in clean_line.strip().splitlines():
             text_lines.append(line.strip())
 
-    # 4. Match each line
+    # 4. Match each line against our patterns
     for line in text_lines:
         if TITLE_REGEX.match(line):
             metadata['title'] = TITLE_REGEX.match(line).group(1)
@@ -84,4 +106,7 @@ def fetch_doc_and_parse_metadata(file_id: str):
         elif TYPE_REGEX.match(line):
             metadata['article_type'] = TYPE_REGEX.match(line).group(1)
 
-    return metadata, exported
+    # 5. Strip out unwanted wrapper tags & inline styling 
+    cleaned_html = strip_gdoc_html(exported)
+
+    return metadata, cleaned_html
