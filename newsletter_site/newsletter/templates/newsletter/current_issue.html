@@ -5,40 +5,89 @@
 
 <!-- Insert your top artwork -->
 <div class="text-center mb-4">
-  <!-- If "jgh_artwork.png" is placed in 'static/newsletter/' -->
-  <img 
-    src="{% static 'newsletter/jgh_artwork.png' %}" 
-    class="img-fluid" 
+  <img
+    src="{% static 'newsletter/jgh_artwork.png' %}"
+    class="img-fluid"
     alt="JGH Artwork"
     style="max-height: 150px;"
   >
 </div>
 
-{% for volume, issues in grouped_volumes %}
-  {% for issue_num, articles_in_issue in issues %}
-  {% with issue_date=articles_in_issue.0.date %}
-  <p style="color:#9b9b9b; text-align: center;">
-    issue {{ issue_num }} | 
-    {% if issue_date %}
-      {{ issue_date|date:"F j, Y"|lower }}
-      {# "F j, Y" -> "December 3, 2024", then "|lower" -> "december 3, 2024" #}
-    {% endif %}
-  </p>
-{% endwith %}
-    
-    {% for article in articles_in_issue %}
-      <div class="mb-4">
-        <!-- Big Title -->
-        <h8 ><a href="{{ article.get_absolute_url }}">{{ article.title }}</a></h8>
-        <!-- Writer in gray -->
-        <div style="color: #666;">
-          by {{ article.writer }}
-        </div>
-        <!-- Preview text -->
-        <p>{{ article.preview_text|linebreaks }}</p>
-      </div>
-    {% endfor %}
-  {% endfor %}
-{% endfor %}
+<p style="color:#9b9b9b; text-align: center;">volume 2, issue 1 | friday, february 14, 2024</p><br>
 
+<!-- Article: The Five Most Romantic 1L Cases -->
+<div class="mb-4">
+    <h5>The Five Most Romantic 1L Cases</h5>
+    <div style="color: #666;">by Daniel Bugingo ’26</div>
+    <div class="text-center mb-4">
+        <img
+          src="{% static 'newsletter/romantic-case-tier-list new 2.png' %}"
+          class="img-fluid"
+          alt="romance case tier list"
+          style="max-height: 250px;"
+        >
+    </div>
+    <p>Valentine’s Day is the libertarian’s holiday. The government usually has an interest in regulating things as unfair and dangerous as romance, but in love we are free—heartbroken, mogged on, gaslit, bankrupted, ghosted, and embarrassed, but free. Here are the five most romantic 1L cases.</p>
+    <p style="text-align: center; font-size: 20px;">
+      <a style="color: #3b4caf;" href="/2/1/five-most-romantic-1l-cases/">read more</a>
+    </p>
+</div><br>
+
+<!-- Article: Advisory Opinion -->
+<div class="mb-4">
+    <h5>Advisory Opinion</h5>
+    <div style="color: #666;">by Kat Kakkis ’26</div><br>
+    <p>It is that loved-up time of the year and you’re asking yourself if you should make a move with that special someone. This fun and flirty flowchart is here to help you! Happy Valentine’s Day.</p>
+    <div class="text-center mb-4">
+        <img
+            src="{% static 'newsletter/advisory opinion 2-1.png' %}"
+            class="img-fluid"
+            alt="advisory opinion"
+            style="max-height: 1300px; width: 180%;"
+        >
+    </div>
+    <p><i>Disclaimer:</i> A gentle reminder that I am not a romance expert (shocking, but true) and this is not professional (or even credible) advice. Please consult your friends or Esther Perel before proceeding with any crush-related activity. Also, I love, love and am so happy for all the law school couples and flings.</p>
+</div>
+
+<br>
+<!-- Crossword and Wuzzle -->
+<div class="text-center mb-4">
+  <img
+    src="{% static 'newsletter/crossword and wuzzle.png' %}"
+    class="img-fluid"
+    alt="cross word and wuzzle"
+    style="max-height: 1400px; width: 100%;"
+  >
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+  }
+  .content-container {
+      flex: 1;
+      max-width: 800px;
+      margin: 2rem auto;
+  }
+  .footer {
+      width: 100%;
+      background-color: #f0eae2;
+      color: #8b7765;
+      padding: 4rem 1rem 1rem;
+      text-align: center;
+  }
+  .footer p {
+      margin: 0;
+  }
+  .footer .credit {
+      text-align: right;
+      color: #c0b8ac;
+  }
+</style>
 {% endblock %}

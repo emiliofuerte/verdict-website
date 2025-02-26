@@ -27,7 +27,9 @@ GOOGLE_CREDENTIALS_FILE = os.path.join(BASE_DIR, 'verdict-450320-f27feda8d266.js
 
 SECRET_KEY = "django-insecure-=bfyqr21^(iwl9f^$85izjsa(g_h3ks3dd1d@1#a26i5l2dm^5"
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["www.columbiaverdict.org","columbiaverdict.org",
+                "webapp-2463956.pythonanywhere.com", "www.webapp-2463956.pythonanywhere.com",
+                "emiliofuerte.pythonanywhere.com", "www.emiliofuerte.pythonanywhere.com"]
 
 # Application definition
 INSTALLED_APPS = [
@@ -105,7 +107,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-STATIC_URL = "static/"
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

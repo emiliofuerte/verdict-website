@@ -1,51 +1,87 @@
-{% load static %} 
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
+   <!-- Google tag (gtag.js) -->
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GB5EPBSPRZ"></script>
+   <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-GB5EPBSPRZ');
+   </script>
   <meta charset="UTF-8">
   <title>THE VERDICT</title>
-  <!-- Bootstrap CSS (via CDN or local) -->
-  <link 
-    rel="stylesheet" 
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
   >
   <link rel="icon" type="image/png" href="{% static 'newsletter/logo.png' %}">
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    .content-container {
+      flex: 1;
+      margin: 2rem auto;
+      max-width: 800px;
+    }
+    /* Styling */
     body {
       font-family: "Times New Roman", Times, serif;
-      background-color: #fffff2; /* the off-white you mentioned */
+      background-color: #fffff2;
     }
-    /* Make all links black and underlined */
     a, a:hover, a:active, a:visited {
       color: black;
       text-decoration: underline;
-    }
-    /* Example spacing overrides if needed */
-    .content-container {
-      margin: 2rem auto; /* adjusts top/bottom margin */
-      max-width: 800px;  /* controls the line length for readability */
     }
     .navbar-nav .nav-link {
       color: black;
     }
     h1 {
-    text-align: center;
-    color: #3d4067;
+      text-align: center;
+      color: #3d4067;
     }
     h2 {
-    color: #9b9b9b;
+      color: #9b9b9b;
+    }
+    /* Sticky Footer */
+    .footer {
+      background-color: #f0eae2;
+      color: #8b7765;
+      padding: 4rem 1rem 1rem;
+      text-align: center;
+    }
+    .footer p {
+      margin: 0;
+    }
+    .footer .credit {
+      text-align: right;
+      color: #c0b8ac;
+    }
+    .content-container {
+      flex: 1;
+      margin: 2rem auto;
+      max-width: 800px;
+      padding: 0 1rem; /* Add horizontal padding */
     }
   </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
 </head>
 <body>
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-md navbar-light py-2" style="background-color: #fffff2;">
-    <div class="container justify-content-center"> 
-      <!-- Brand with updated color and italics -->
+    <div class="container justify-content-center">
       <a class="navbar-brand mx-3" href="{% url 'current_issue' %}" style="color: rgb(133, 114, 108); font-style: italic; font-size: 1.5rem;">
       THE COLUMBIA LAW VERDICT
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -75,21 +111,16 @@
   </div>
 
   <!-- Footer -->
-  <footer class="mt-4" style="background-color: #f0eae2; color: #8b7765; padding: 4rem 1rem 1rem;">
-    <!-- Centered sentence on top -->
-    <p style="margin: 0 0 1rem 0; text-align: center;">
-      <i>The Verdict</i> is a student-run community newsletter committed to fairness, accountability, and respect.
-    </p>
-    
-    <!-- Right-aligned text below -->
-    <p style="margin: 0; text-align: right; color:#c0b8ac">
+  <footer class="footer mt-auto">
+    <p><i>The Verdict</i> is a student-run newsletter devoted to building community and elevating student voices at CLS.</p><br>
+    <p class="credit">
       Site built by Daniel Bugingo '26<br>
-      Artwork and color scheme by Angel Mai '27<br>
+      Artwork and color scheme by Angel Mai '27
     </p>
   </footer>
 
-  <!-- Bootstrap JS (via CDN or local) -->
-  <script 
+  <!-- Bootstrap JS -->
+  <script
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
   </script>
 </body>

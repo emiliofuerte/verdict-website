@@ -1,7 +1,7 @@
 {% extends "newsletter/base.html" %}
 {% block title %}{{ article.title }}{% endblock %}
 {% block content %}
-  <h3>{{ article.title }}</h3>
+  <h3 style="text-align: center;">{{ article.title }}</h3>
   <p>{{ article.writer }}</p>
   <p>{{ article.date }}</p>
   <div>{{ article.content_html|safe }}</div>
