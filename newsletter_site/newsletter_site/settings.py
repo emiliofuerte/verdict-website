@@ -29,7 +29,8 @@ SECRET_KEY = "django-insecure-=bfyqr21^(iwl9f^$85izjsa(g_h3ks3dd1d@1#a26i5l2dm^5
 DEBUG = True
 ALLOWED_HOSTS = ["www.columbiaverdict.org","columbiaverdict.org",
                 "webapp-2463956.pythonanywhere.com", "www.webapp-2463956.pythonanywhere.com",
-                "emiliofuerte.pythonanywhere.com", "www.emiliofuerte.pythonanywhere.com"]
+                "emiliofuerte.pythonanywhere.com", "www.emiliofuerte.pythonanywhere.com","127.0.0.1",
+                "localhost"]
 
 # Application definition
 INSTALLED_APPS = [
