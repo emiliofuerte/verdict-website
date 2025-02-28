@@ -2,7 +2,6 @@
 {% block title %}{{ article.title }}{% endblock %}
 {% block content %}
   <h3 style="text-align: center;">{{ article.title }}</h3>
-  <p>{{ article.writer }}</p>
-  <p>{{ article.date }}</p>
+  <p style="font-size: 16px;"><strong>by {{ article.writer }}</strong><br><em>{{ article.date }}</em></p>
   <div>{{ article.content_html|safe }}</div>
 {% endblock %}
