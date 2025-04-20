@@ -1,9 +1,26 @@
 # newsletter/models.py
+
+import re
 from django.db import models
 from django.utils.text import slugify
-import re
 
+# Used in Article.save() to extract the Google Doc ID from the URL
 DOC_URL_REGEX = re.compile(r'/document/d/([^/]+)/')
+
+class Author(models.Model):
+    name     = models.CharField(max_length=255, unique=True)
+    slug     = models.SlugField(max_length=255, unique=True, blank=True)
+    bio      = models.TextField(blank=True)
+    headshot = models.ImageField(upload_to='authors/', blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)[:255]
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
 
 class Article(models.Model):
     # Basic metadata
@@ -13,7 +30,7 @@ class Article(models.Model):
 
     # Volume/Issue structure
     volume_number = models.PositiveIntegerField(default=1, help_text="Volume number")
-    issue_number = models.PositiveIntegerField(default=1, help_text="Issue number")
+    issue_number  = models.PositiveIntegerField(default=1, help_text="Issue number")
 
     # Short version of the title for URL slugs
     short_title = models.SlugField(
@@ -41,20 +58,17 @@ class Article(models.Model):
         default='news'
     )
 
+    # Link to one or more Author objects
+    authors = models.ManyToManyField(
+        Author,
+        blank=True,
+        related_name='articles'
+    )
+
     # Google Doc fields
-    doc_url = models.TextField(
-        blank=True,
-        help_text="Paste the full Google Doc URL here."
-    )
-    doc_id = models.CharField(
-        max_length=255,
-        blank=True,
-        help_text="Auto-extracted from doc_url"
-    )
-    content_html = models.TextField(
-        blank=True,
-        help_text="Fetched HTML content from Google Docs."
-    )
+    doc_url      = models.TextField(blank=True, help_text="Paste the full Google Doc URL here.")
+    doc_id       = models.CharField(max_length=255, blank=True, help_text="Auto-extracted from doc_url")
+    content_html = models.TextField(blank=True, help_text="Fetched HTML content from Google Docs.")
 
     is_current_issue = models.BooleanField(default=False)
 

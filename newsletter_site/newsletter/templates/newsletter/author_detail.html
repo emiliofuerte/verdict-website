@@ -1,0 +1,31 @@
+{% extends "newsletter/base.html" %}
+{% block title %}{{ author.name }}{% endblock %}
+
+{% block content %}
+  <div class="text-center mb-5">
+    <h1>{{ author.name }}</h1>
+    {% if author.headshot %}
+      <img
+        src="{{ author.headshot.url }}"
+        alt="{{ author.name }}"
+        class="img-fluid rounded-circle mb-3"
+        style="max-width:200px;"
+      >
+    {% endif %}
+    <div class="mb-4">{{ author.bio|linebreaks }}</div>
+  </div>
+
+  <h3>Articles by {{ author.name }}</h3>
+  <ul>
+    {% for a in articles %}
+      <li>
+        <a href="{{ a.get_absolute_url }}">
+          {{ a.title|default:"Untitled" }}
+        </a>
+        {% if a.date %}— {{ a.date|date:"M j, Y" }}{% endif %}
+      </li>
+    {% empty %}
+      <li>No articles yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

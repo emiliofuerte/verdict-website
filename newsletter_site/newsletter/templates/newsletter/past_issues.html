@@ -1,60 +1,51 @@
 {% extends "newsletter/base.html" %}
 {% block title %}Past Issues{% endblock %}
-
 {% block content %}
 <h1>past issues</h1>
-
 <br>
 {% for volume_number, issues in grouped_volumes %}
   {% if volume_number == 2 %}
     <h2>volume 2</h2> <br>
     {% for issue_number, articles_in_issue in issues %}
-      {% if issue_number == 1 %}
-        {% with issue_date=articles_in_issue.0.date %}
-          <p style="font-size: 20px;"><em>
-            Issue 1
-            {% if issue_date %}| {{ issue_date|date:"F j, Y" }}{% endif %}
-          </em></p>
-        {% endwith %}
-        <div>
-          {% for article in articles_in_issue %}
-            <div style="margin-bottom: 1rem; font-size: 20px;">
-              <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
-                {{ article.title }}
-              </a>
-              <div style="color: grey;">{{ article.writer }}</div>
-            </div>
-          {% endfor %}
-        </div>
-        <br>
-      {% endif %}
+      {% with issue_date=articles_in_issue.0.date %}
+        <p style="font-size: 20px;"><em>
+          Issue {{ issue_number }}
+          {% if issue_date %}| {{ issue_date|date:"F j, Y" }}{% endif %}
+        </em></p>
+      {% endwith %}
+      <div>
+        {% for article in articles_in_issue %}
+          <div style="margin-bottom: 1rem; font-size: 20px;">
+            <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
+              {{ article.title }}
+            </a>
+            <div style="color: grey;">{{ article.writer }}</div>
+          </div>
+        {% endfor %}
+      </div>
+      <br>
     {% endfor %}
   {% elif volume_number == 1 %}
     <h2>volume 1</h2> <br>
     {% for issue_number, articles_in_issue in issues %}
-      {% if issue_number == 7 %}
-        {% with issue_date=articles_in_issue.0.date %}
-          <p style="font-size: 20px;"><em>
-            Issue 7
-            {% if issue_date %}| {{ issue_date|date:"F j, Y" }}{% endif %}
-          </em></p>
-        {% endwith %}
-        <div>
-          {% for article in articles_in_issue %}
-            <div style="margin-bottom: 1rem; font-size: 20px;">
-              <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
-                {{ article.title }}
-              </a>
-              <div style="color: grey;">{{ article.writer }}</div>
-            </div>
-          {% endfor %}
-        </div>
-        <br>
-      {% endif %}
+      {% with issue_date=articles_in_issue.0.date %}
+        <p style="font-size: 20px;"><em>
+          Issue {{ issue_number }}
+          {% if issue_date %}| {{ issue_date|date:"F j, Y" }}{% endif %}
+        </em></p>
+      {% endwith %}
+      <div>
+        {% for article in articles_in_issue %}
+          <div style="margin-bottom: 1rem; font-size: 20px;">
+            <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
+              {{ article.title }}
+            </a>
+            <div style="color: grey;">{{ article.writer }}</div>
+          </div>
+        {% endfor %}
+      </div>
+      <br>
     {% endfor %}
   {% endif %}
 {% endfor %}
-
-<p><em>(older issues coming soon!)</em></p>
-
 {% endblock %}

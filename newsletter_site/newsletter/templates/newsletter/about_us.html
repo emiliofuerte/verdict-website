@@ -7,6 +7,29 @@
   <h1>about us</h1><br>
 
     <p style="font-size: 20px;">
-    The <i>Columbia Law Verdict</i> is a student-run newsletter devoted to building community and elevating student voices at CLS. Our newsletter publishes interviews, advice, opinions, and creative work throughout the semester. We seek to achieve our community-building goals by creating a shared experience for all CLS students while offering a forum for open and respectful discourse, all in accordance with our core values of fairness, accountability, and respect.
+    The <i>Columbia Law Verdict</i> is a student-run newsletter devoted to building community at CLS. Our newsletter publishes interviews, advice, opinions, and creative work throughout the semester. We offer a forum for open and respectful discourse, in accordance with our core values of fairness, accountability, and respect.
   </p>
+
+  <h1>our team</h1>
+  <div class="row">
+    {% for author in authors %}
+      <div class="col-6 col-md-4 mb-4 text-center">
+        {% if author.headshot %}
+          <img
+            src="{{ author.headshot.url }}"
+            alt="{{ author.name }}"
+            class="img-fluid rounded-circle mb-2"
+            style="max-width:150px;"
+          >
+        {% endif %}
+        <h5>
+          <a href="{% url 'author_detail' author.slug %}">
+            {{ author.name }}
+          </a>
+        </h5>
+      </div>
+    {% empty %}
+      <p>No authors found.</p>
+    {% endfor %}
+  </div>
 {% endblock %}

@@ -15,4 +15,4 @@ db.sqlite3
 secrets.json
 
 # Ignore service account credentials (IMPORTANT!)
-*.json
+verdict-450320-f27feda8d266.json
