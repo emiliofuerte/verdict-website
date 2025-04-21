@@ -19,7 +19,15 @@
             <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
               {{ article.title }}
             </a>
-            <div style="color: grey;">{{ article.writer }}</div>
+            <div style="color: grey;">
+              {% for author in article.authors.all %}
+                <a href="{% url 'author_detail' author.slug %}" style="color: grey;">
+                  {{ author.name }}
+                </a>{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                {{ article.writer }}
+              {% endfor %}
+            </div>
           </div>
         {% endfor %}
       </div>
@@ -40,7 +48,15 @@
             <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
               {{ article.title }}
             </a>
-            <div style="color: grey;">{{ article.writer }}</div>
+            <div style="color: grey;">
+              {% for author in article.authors.all %}
+                <a href="{% url 'author_detail' author.slug %}" style="color: grey;">
+                  {{ author.name }}
+                </a>{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                {{ article.writer }}
+              {% endfor %}
+            </div>
           </div>
         {% endfor %}
       </div>

@@ -10,9 +10,14 @@
     The <i>Columbia Law Verdict</i> is a student-run newsletter devoted to building community at CLS. Our newsletter publishes interviews, advice, opinions, and creative work throughout the semester. We offer a forum for open and respectful discourse, in accordance with our core values of fairness, accountability, and respect.
   </p>
 
-  <h1>our team</h1>
+  <br><br>
+
+  <p style="font-size: 30px;text-align: center;color: #3d4067;">
+    staff
+  </p>
+  <br>
   <div class="row">
-    {% for author in authors %}
+    {% for author in staff %}
       <div class="col-6 col-md-4 mb-4 text-center">
         {% if author.headshot %}
           <img
@@ -27,9 +32,31 @@
             {{ author.name }}
           </a>
         </h5>
+        <p style="font-size: 20px;">{{ author.get_role_display }}</p>
       </div>
     {% empty %}
-      <p>No authors found.</p>
+      <p>No staff found.</p>
     {% endfor %}
   </div>
+  
+  <br><br>
+  
+  <p style="font-size: 30px;text-align: center;color: #3d4067;">
+    contributors
+  </p>
+  <br>
+  <div class="row">
+    {% for author in contributors %}
+      <div class="col-6 col-md-4 mb-4 text-center">
+        <h5>
+          <a href="{% url 'author_detail' author.slug %}">
+            {{ author.name }}
+          </a>
+        </h5>
+      </div>
+    {% empty %}
+      <p>No contributors found.</p>
+    {% endfor %}
+  </div>
+
 {% endblock %}

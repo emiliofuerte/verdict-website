@@ -1,7 +1,22 @@
 {% extends "newsletter/base.html" %}
 {% block title %}{{ article.title }}{% endblock %}
 {% block content %}
-  <h3 style="text-align: center;">{{ article.title }}</h3>
-  <p style="font-size: 16px;"><strong>by {{ article.writer }}</strong><br><em>{{ article.date }}</em></p>
+{% if article.title_image %}
+<div style="text-align: center;">
+  <img src="{{ article.title_image.url }}" alt="{{ article.title }}" style="max-height: 150px; border: 1.5pt solid rgb(224, 220, 209);">
+</div>
+{% else %}
+<h3 style="text-align: center;">{{ article.title }}</h3>
+{% endif %}
+  <p style="font-size: 16px;">
+    <strong>by
+      {% for author in article.authors.all %}
+        <a href="{% url 'author_detail' author.slug %}">{{ author.name }}</a>{% if not forloop.last %}, {% endif %}
+      {% empty %}
+        {{ article.writer }}
+      {% endfor %}
+    </strong><br>
+    <em>{{ article.date }}</em>
+  </p>
   <div>{{ article.content_html|safe }}</div>
 {% endblock %}

@@ -13,6 +13,22 @@ class Author(models.Model):
     bio      = models.TextField(blank=True)
     headshot = models.ImageField(upload_to='authors/', blank=True)
 
+    # Article type choices
+    ROLES = [
+        ('director', 'Director'),
+        ('lead editor', 'Lead Editor'),
+        ('lead publisher', 'Lead Publisher'),
+        ('treasurer', 'Treasurer'),
+        ('social chair', 'Social Chair'),
+        ('writer', 'Writer'),
+        ('contributor', 'Contributor'),
+    ]
+    role = models.CharField(
+        max_length=50,
+        choices=ROLES,
+        default='Contributor'
+    )
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:255]
@@ -38,6 +54,9 @@ class Article(models.Model):
         blank=True,
         help_text="Short URL-friendly version of the title"
     )
+
+    # if the title's an image (advisory opinion, cross examination)
+    title_image = models.ImageField(upload_to='article_titles/', blank=True, null=True)
 
     # Preview text for homepage / listings
     preview_text = models.TextField(

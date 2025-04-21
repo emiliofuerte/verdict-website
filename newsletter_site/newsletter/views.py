@@ -3,6 +3,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Article, Author
 from collections import defaultdict
+from django.db.models import Case, When, Value, IntegerField
 
 def current_issue(request):
     articles = Article.objects.filter(is_current_issue=True).order_by(
@@ -83,3 +84,35 @@ def author_detail(request, slug):
         'author': author,
         'articles': articles,
     })
+
+def about_us(request):
+    role_order = [
+        'director', 'lead editor', 'lead publisher',
+        'treasurer', 'writer',                       # social‑chair shows but after treasurer
+        'social chair',
+    ]
+
+    # annotate each row with its order index so we can sort the queryset
+    ordering = Case(
+        *[When(role=r, then=Value(i)) for i, r in enumerate(role_order)],
+        default=Value(len(role_order)),
+        output_field=IntegerField(),
+    )
+
+    staff = (
+        Author.objects
+        .filter(role__in=role_order)
+        .annotate(_order=ordering)
+        .order_by('_order', 'name')
+    )
+    contributors = (
+        Author.objects
+        .filter(role='contributor')
+        .order_by('name')
+    )
+
+    return render(
+        request,
+        'newsletter/about_us.html',
+        {'staff': staff, 'contributors': contributors},
+    )

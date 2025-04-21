@@ -58,6 +58,7 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             "fields": (
+                "title_image",
                 "title",
                 "short_title",
                 "writer",
@@ -81,8 +82,9 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ("name", "slug", "article_count")
+    list_display = ("name", "slug", "role", "article_count")
     prepopulated_fields = {"slug": ("name",)}
+    fields = ("name", "slug", "role", "bio", "headshot")
 
     def article_count(self, obj):
         return obj.articles.count()
