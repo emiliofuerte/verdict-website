@@ -3,65 +3,37 @@
 {% block content %}
 <h1>past issues</h1>
 <br>
+
+{# Render any volume (e.g., 3, 2, 1) with the same structure #}
 {% for volume_number, issues in grouped_volumes %}
-  {% if volume_number == 2 %}
-    <h2>volume 2</h2> <br>
-    {% for issue_number, articles_in_issue in issues %}
-      {% with issue_date=articles_in_issue.0.date %}
-        <p style="font-size: 20px;"><em>
-          Issue {{ issue_number }}
-          {% if issue_date %}| {{ issue_date|date:"F j, Y" }}{% endif %}
-        </em></p>
-      {% endwith %}
-      <div>
-        {% for article in articles_in_issue %}
-          <div style="margin-bottom: 1rem; font-size: 20px;">
-            <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
-              {{ article.title }}
-            </a>
-            <div style="color: grey;">
-              {% for author in article.authors.all %}
-                <a href="{% url 'author_detail' author.slug %}" style="color: grey;">
-                  {{ author.name }}
-                </a>{% if not forloop.last %}, {% endif %}
-              {% empty %}
-                {{ article.writer }}
-              {% endfor %}
-            </div>
+  <h2>volume {{ volume_number }}</h2>
+  <br>
+  {% for issue_number, articles_in_issue in issues %}
+    {% with issue_date=articles_in_issue.0.date %}
+      <p style="font-size: 20px;"><em>
+        Issue {{ issue_number }}
+        {% if issue_date %}| {{ issue_date|date:"F j, Y" }}{% endif %}
+      </em></p>
+    {% endwith %}
+    <div>
+      {% for article in articles_in_issue %}
+        <div style="margin-bottom: 1rem; font-size: 20px;">
+          <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
+            {{ article.title }}
+          </a>
+          <div style="color: grey;">
+            {% for author in article.authors.all %}
+              <a href="{% url 'author_detail' author.slug %}" style="color: grey;">
+                {{ author.name }}
+              </a>{% if not forloop.last %}, {% endif %}
+            {% empty %}
+              {{ article.writer }}
+            {% endfor %}
           </div>
-        {% endfor %}
-      </div>
-      <br>
-    {% endfor %}
-  {% elif volume_number == 1 %}
-    <h2>volume 1</h2> <br>
-    {% for issue_number, articles_in_issue in issues %}
-      {% with issue_date=articles_in_issue.0.date %}
-        <p style="font-size: 20px;"><em>
-          Issue {{ issue_number }}
-          {% if issue_date %}| {{ issue_date|date:"F j, Y" }}{% endif %}
-        </em></p>
-      {% endwith %}
-      <div>
-        {% for article in articles_in_issue %}
-          <div style="margin-bottom: 1rem; font-size: 20px;">
-            <a href="{% url 'show_article' article.id %}" style="color: #3b4caf;">
-              {{ article.title }}
-            </a>
-            <div style="color: grey;">
-              {% for author in article.authors.all %}
-                <a href="{% url 'author_detail' author.slug %}" style="color: grey;">
-                  {{ author.name }}
-                </a>{% if not forloop.last %}, {% endif %}
-              {% empty %}
-                {{ article.writer }}
-              {% endfor %}
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-      <br>
-    {% endfor %}
-  {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+    <br>
+  {% endfor %}
 {% endfor %}
 {% endblock %}
