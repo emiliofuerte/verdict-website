@@ -12,96 +12,59 @@
   >
 </div>
 
-<p style="color:#9b9b9b; text-align: center;">Vol. 3, Issue 3 | Friday, October 17, 2025</p><br><br><br>
+<p style="color:#9b9b9b; text-align: center;">Vol. {{ volume }}, Issue {{ issue }}{% if date %} | {{ date|date:"l, F j, Y" }}{% endif %}</p><br><br><br>
 
-
-<!-- Article: cartoon
+{% for article in articles %}
+<!-- Article: {{ article.title }} -->
 <div class="mb-4">
-    <h3 style="text-align: center;">A Lesson in Statutory Interpretation Through Dungeons & Dragons</h3>
-    <div style="text-align: center; color: #666; font-size: 20px;">by Ryan Jarratt &rsquo;26</div><br>
+    {% if article.title_image %}
+    <div style="text-align: center;">
+      <img src="{{ article.title_image.url }}" alt="{{ article.title }}" style="max-height: 150px; border: 1.5pt solid rgb(224, 220, 209);">
+    </div>
+    {% else %}
+    <h3 style="text-align: center;">{{ article.title }}</h3>
+    {% endif %}
 
-<img
-    src="/media/newsletter/kendall_artwork.jpg"
-    class="img-fluid"
-    alt="political cartoon"
-    style="max-height: 700px;border: 1.5pt solid rgb(224, 220, 209);"
-  >
-</div>
+    <div style="text-align: center; color: #666; font-size: 20px;">
+      by
+      {% for author in article.authors.all %}
+        {{ author.name }}{% if not forloop.last %}, {% endif %}
+      {% empty %}
+        {{ article.writer }}
+      {% endfor %}
+    </div><br>
 
-
-<br>
-<hr style="border: 0; border-top: 1pt solid rgb(133, 114, 108); margin: 0;">
-<br><br>
--->
-
-<!-- Article: note from editors- -->
-<div class="mb-4">
-    <h3 style="text-align: center;">A Statement from the Editors</h3>
-    <div style="text-align: center; color: #666; font-size: 20px;">by the Editors</div><br>
-
-      <p style="font-size: 20px;font-style: italic">Dear readers:</p>
-      <p style="font-size: 20px;font-style: italic">Upon consideration of last issue’s poll results, the Verdict is now accepting anonymous submissions for creative works! (Note that opinion pieces still need to be attributed.)</p>
-      <p style="font-size: 20px;font-style: italic">We are also prohibiting the use of generative AI in submissions as well as the newsletter’s own creative processes. Please see below for our very official and sincere statement on AI use for immediate release to press.</p>
-      <p style="font-size: 20px;">---</p>
-      <p style="font-size: 20px; text-align: center"><strong>FOR IMMEDIATE RELEASE:</strong></p>
-      <p style="font-size: 20px;">Certainly! Here is a statement denouncing the use of AI in creative fields and affirming the Verdict’s no-AI policy:</p>
-      <p style="font-size: 20px;">In our previous issue we conducted a poll to gather students’ opinions on several amendments to the Verdict's Constitution, and the student body responded enthusiastically. We thank our readers for their genuinely insightful feedback—it was not just candid, but also honest.</p>
-      <p style="font-size: 20px;">Here are some key points. 78% of poll respondents felt AI-generated art was bad and should never be used in The Verdict. As the most popular (and only) student-run creative outlet at Columbia Law School, the Verdict recognizes its vital role in elevating human voices and reaffirms its unwavering commitment to its ideals of fairness, accountability, and respect.</p>
-      <p style="font-size: 20px;">Consequentially, the Verdict hereby announces that we will not accept submissions created by generative AI, nor use generative AI ourselves in any part of the creative process.</p>
-</div>
-
-<br>
-<hr style="border: 0; border-top: 1pt solid rgb(133, 114, 108); margin: 0;">
-<br><br>
-
-
-<!-- Article: statutory interpretation- -->
-<div class="mb-4">
-    <h3 style="text-align: center;">A Lesson in Statutory Interpretation Through Dungeons & Dragons</h3>
-    <div style="text-align: center; color: #666; font-size: 20px;">by Ryan Jarratt &rsquo;26</div><br>
-
+    {% if article.preview_image %}
     <div class="text-center mb-4">
       <img
-        src="{% static 'newsletter/manchu.jpg' %}"
+        src="{{ article.preview_image.url }}"
         class="img-fluid"
-        alt="JGH Artwork"
+        alt="{{ article.title }}"
         style="max-height: 250px; border: 1.5pt solid rgb(224, 220, 209);"
       >
     </div>
+    {% endif %}
 
-      <p style="font-size: 20px;">“For a textualist Game Master, the application of this rule is clear: Because the Player’s Handbook specifies that ranged attacks against enemies who are lying down have disadvantage, the Ranger’s attack must be made as such. However, a purposivist Dungeon Master may not so blindly accept this holding.”</p>
+    {% if article.preview_text %}
+      <div style="font-size: 20px;">
+        {{ article.preview_text|safe }}
+      </div>
+    {% endif %}
 
     <p style="text-align: center; font-size: 20px;">
-      <a style="color: #3b4caf;" href="/article/66/">click here for full article</a>
+      <a style="color: #3b4caf;" href="{{ article.get_absolute_url }}">Read here</a>
     </p>
 </div>
 
+{% if not forloop.last %}
 <br>
 <hr style="border: 0; border-top: 1pt solid rgb(133, 114, 108); margin: 0;">
 <br><br>
+{% endif %}
 
-<!-- Article: just a story -->
-<div class="mb-4">
-    <h3 style="text-align: center;">A Rant</h3>
-    <div style="text-align: center; color: #666; font-size: 20px;">by Jennifer Li &rsquo;26</div><br>
-
-<div class="text-center mb-4">
-      <img
-        src="{% static 'newsletter/rose.png' %}"
-        class="img-fluid"
-        alt="JGH Artwork"
-        style="max-height: 250px;"
-      >
-    </div>
-
-      <p style="font-size: 20px;">“I've been trying to read cases this entire day, and in another twelve hours, I'm going to be sitting in class listening to discussions of how to square together inconsistent rulings so that somehow, some way, we can understand them to be consistent.</p>
-      <p style="font-size: 20px;">Why?</p>
-      <p style="font-size: 20px;">Who is playing by the rules these days?”</p>
-
-    <p style="text-align: center; font-size: 20px;">
-      <a style="color: #3b4caf;" href="/article/68/">click here for full article</a>
-    </p>
-</div>
+{% empty %}
+<p style="text-align: center; font-size: 20px;">No articles in the current issue yet. Check back soon!</p>
+{% endfor %}
 
 {% endblock %}
 

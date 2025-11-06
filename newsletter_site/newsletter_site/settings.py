@@ -20,7 +20,8 @@ GOOGLE_API_SCOPES = [
     'https://www.googleapis.com/auth/drive.readonly',
     'https://www.googleapis.com/auth/documents.readonly',
 ]
-GOOGLE_CREDENTIALS_FILE = os.path.join(BASE_DIR, 'verdict-450320-f27feda8d266.json')
+# Look for credentials file - name doesn't matter as long as it ends in .json
+GOOGLE_CREDENTIALS_FILE = os.path.join(BASE_DIR, 'google-credentials.json')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/

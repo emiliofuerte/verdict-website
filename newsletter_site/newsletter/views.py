@@ -6,19 +6,19 @@ from collections import defaultdict
 from django.db.models import Case, When, Value, IntegerField
 
 def current_issue(request):
-    articles = Article.objects.filter(is_current_issue=True).order_by(
-        "-volume_number", "-issue_number", "title"
-    )
-    grouped = defaultdict(lambda: defaultdict(list))
-    for a in articles:
-        grouped[a.volume_number][a.issue_number].append(a)
+    articles = Article.objects.filter(is_current_issue=True).order_by("display_order", "title")
 
-    sorted_volumes = sorted(grouped.keys(), reverse=True)
+    # Get the latest volume/issue/date from current articles
+    latest_article = articles.first()
+    volume = latest_article.volume_number if latest_article else 3
+    issue = latest_article.issue_number if latest_article else 3
+    date = latest_article.date if latest_article else None
+
     context = {
-        "grouped_volumes": [
-            (v, sorted(grouped[v].items(), key=lambda x: x[0], reverse=True))
-            for v in sorted_volumes
-        ]
+        "articles": articles,
+        "volume": volume,
+        "issue": issue,
+        "date": date,
     }
     return render(request, 'newsletter/current_issue.html', context)
 

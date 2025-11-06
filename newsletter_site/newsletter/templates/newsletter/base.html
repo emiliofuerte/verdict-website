@@ -71,6 +71,52 @@
       max-width: 800px;
       padding: 0 1rem; /* Add horizontal padding */
     }
+
+    /* Article content styling */
+    .article-content {
+      font-size: 20px;
+      line-height: 1.6;
+    }
+
+    /* Images in article content */
+    .article-content img {
+      max-width: 100%;
+      max-height: 500px;
+      height: auto;
+      width: auto;
+      display: block;
+      margin: 1.5rem auto;
+      border-radius: 4px;
+      object-fit: contain;
+    }
+
+    /* Image captions (paragraph immediately after image) */
+    .article-content img + p {
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      font-style: italic;
+      margin-top: -1rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Footnotes styling */
+    .article-content .footnotes {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    /* Superscript links */
+    .article-content sup {
+      font-size: 0.7em;
+    }
+
+    .article-content sup a {
+      text-decoration: none;
+      padding: 0 2px;
+    }
   </style>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 

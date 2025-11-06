@@ -64,6 +64,20 @@ class Article(models.Model):
         help_text="Short preview or intro for the article"
     )
 
+    # Preview image for homepage (different from title_image)
+    preview_image = models.ImageField(
+        upload_to='article_previews/',
+        blank=True,
+        null=True,
+        help_text="Image to show on the current issue homepage"
+    )
+
+    # Display order for current issue page
+    display_order = models.IntegerField(
+        default=0,
+        help_text="Order to display on current issue page (lower numbers appear first)"
+    )
+
     # Article type choices
     ARTICLE_TYPES = [
         ('op-ed', 'Op-Ed'),

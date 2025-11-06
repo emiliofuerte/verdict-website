@@ -22,12 +22,17 @@ TYPE_REGEX = re.compile(r"^Type of Article:\s*(.+)$", re.IGNORECASE)
 
 def strip_gdoc_html(raw_html: str) -> str:
     """
-    Removes top-level <html>, <head>, <body>, <meta>, and inline style
-    attributes from a Google Docs export, so it won't override our
-    site's layout. 
+    Cleans up Google Docs HTML export to make it readable and styled with site CSS.
+    - Removes inline styles and CSS
+    - Converts footnote links to proper superscripts
+    - Preserves semantic HTML (em, strong, links)
+    - Removes Google's list styling junk
     """
     # Remove DOCTYPE if present
     raw_html = re.sub(r'<!DOCTYPE.*?>', '', raw_html, flags=re.IGNORECASE)
+
+    # Remove entire <style> blocks (Google Docs injects tons of CSS)
+    raw_html = re.sub(r'<style[^>]*>.*?</style>', '', raw_html, flags=re.IGNORECASE|re.DOTALL)
 
     # Remove entire <html> and <head> tags
     raw_html = re.sub(r'</?(html|head)\b[^>]*>', '', raw_html, flags=re.IGNORECASE)
@@ -38,8 +43,76 @@ def strip_gdoc_html(raw_html: str) -> str:
     # Extract everything inside the <body>...</body>, removing the body tags themselves
     raw_html = re.sub(r'<body\b[^>]*>(.*?)</body>', r'\1', raw_html, flags=re.IGNORECASE|re.DOTALL)
 
-    # Remove inline style attributes (which often force background/width)
-    raw_html = re.sub(r'style="[^"]*"', '', raw_html, flags=re.IGNORECASE)
+    # BEFORE removing styles, convert Google's italic/bold spans to semantic HTML
+    # Convert <span style="...font-style:italic...">text</span> to <em>text</em>
+    # Using non-greedy (.*?) to capture content including nested tags
+    raw_html = re.sub(
+        r'<span\s+style="[^"]*font-style:\s*italic[^"]*">(.*?)</span>',
+        r'<em>\1</em>',
+        raw_html,
+        flags=re.IGNORECASE | re.DOTALL
+    )
+
+    # Convert <span style="...font-weight:700...">text</span> to <strong>text</strong>
+    # Using non-greedy (.*?) to capture content including nested tags
+    raw_html = re.sub(
+        r'<span\s+style="[^"]*font-weight:\s*(?:700|bold)[^"]*">(.*?)</span>',
+        r'<strong>\1</strong>',
+        raw_html,
+        flags=re.IGNORECASE | re.DOTALL
+    )
+
+    # Remove inline style attributes EXCEPT text-align
+    # Keep text-align styles but remove everything else
+    def preserve_text_align(match):
+        style_content = match.group(1)
+        # Check if there's a text-align property
+        text_align_match = re.search(r'text-align:\s*[^;]+', style_content, re.IGNORECASE)
+        if text_align_match:
+            return f' style="{text_align_match.group(0)}"'
+        return ''
+
+    raw_html = re.sub(r'\s+style="([^"]*)"', preserve_text_align, raw_html, flags=re.IGNORECASE)
+
+    # Remove all class attributes (Google adds lots of junk classes)
+    raw_html = re.sub(r'\s+class="[^"]*"', '', raw_html, flags=re.IGNORECASE)
+
+    # Fix footnote references FIRST (before removing IDs): Convert <sup><a>[1]</a></sup> to proper format
+    # Keep the href and convert [1] to 1
+    raw_html = re.sub(r'<sup[^>]*><a\s+href="([^"]+)"[^>]*>\[(\d+)\]</a></sup>', r'<sup><a href="\1">\2</a></sup>', raw_html)
+
+    # Also fix standalone [1] in superscripts
+    raw_html = re.sub(r'<sup[^>]*>\[(\d+)\]</sup>', r'<sup>\1</sup>', raw_html)
+
+    # Fix footnote markers at bottom: Keep the id attribute but remove brackets
+    # <a href="#ftnt_ref1" id="ftnt1">[1]</a> -> <a href="#ftnt_ref1" id="ftnt1">1</a>
+    raw_html = re.sub(r'(<a[^>]*>)\[(\d+)\](</a>)', r'\g<1>\2\g<3>', raw_html)
+
+    # NOW remove id attributes EXCEPT for footnote anchors (ftnt and ftnt_ref)
+    # Remove id attributes that are NOT footnote-related
+    raw_html = re.sub(r'\s+id="(?!ftnt)[^"]*"', '', raw_html, flags=re.IGNORECASE)
+
+    # Google Docs often exports italics in the footnotes section within a <div>
+    # Let's wrap the footnotes section to preserve formatting
+    # Match the footnotes section (starts with <hr> and contains footnote references)
+    footnotes_match = re.search(r'(<hr>.*)', raw_html, flags=re.DOTALL)
+    if footnotes_match:
+        footnotes_html = footnotes_match.group(1)
+        # Wrap footnotes in a special div so we can style them
+        raw_html = raw_html[:footnotes_match.start()] + '<div class="footnotes">' + footnotes_html + '</div>'
+
+    # Remove empty tags that might be left over
+    raw_html = re.sub(r'<(\w+)[^>]*>\s*</\1>', '', raw_html)
+
+    # Clean up multiple consecutive spaces/newlines
+    raw_html = re.sub(r'\n\s*\n\s*\n+', '\n\n', raw_html)
+
+    # Remove trailing/leading whitespace from paragraphs
+    raw_html = re.sub(r'<p[^>]*>\s+', '<p>', raw_html)
+    raw_html = re.sub(r'\s+</p>', '</p>', raw_html)
+
+    # Remove horizontal rules that are just styling artifacts
+    raw_html = re.sub(r'<hr[^>]*>', '<hr>', raw_html)
 
     return raw_html.strip()
 

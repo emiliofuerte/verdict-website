@@ -49,9 +49,10 @@ class ArticleAdmin(admin.ModelAdmin):
         "issue_number",
         "article_type",
         "is_current_issue",
+        "display_order",
         "updated_at",
     )
-    list_editable = ("volume_number", "issue_number", "is_current_issue")
+    list_editable = ("volume_number", "issue_number", "is_current_issue", "display_order")
     search_fields = ("title", "writer", "short_title")
     list_filter = ("article_type", "is_current_issue")
 
@@ -64,11 +65,13 @@ class ArticleAdmin(admin.ModelAdmin):
                 "writer",
                 "authors",
                 "preview_text",
+                "preview_image",
                 "date",
                 "article_type",
                 "volume_number",
                 "issue_number",
                 "is_current_issue",
+                "display_order",
             )
         }),
         ("Google Doc Info", {
