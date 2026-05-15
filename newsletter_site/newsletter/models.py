@@ -1,11 +1,43 @@
 # newsletter/models.py
 
+import io
 import re
+from django.core.files.base import ContentFile
 from django.db import models
 from django.utils.text import slugify
+from PIL import Image
 
-# Used in Article.save() to extract the Google Doc ID from the URL
 DOC_URL_REGEX = re.compile(r'/document/d/([^/]+)/')
+
+MAX_IMAGE_PX = 1200
+
+def compress_image(image_field, max_px=MAX_IMAGE_PX):
+    """Resize and compress an ImageField in-place. Skips if already small enough."""
+    if not image_field:
+        return
+    try:
+        image_field.open('rb')
+        img = Image.open(image_field)
+        if img.width <= max_px and img.height <= max_px and image_field.size < 300_000:
+            return
+        img.thumbnail((max_px, max_px), Image.LANCZOS)
+        fmt = img.format or 'JPEG'
+        if fmt == 'PNG' and img.mode in ('RGBA', 'P'):
+            fmt = 'PNG'
+        else:
+            fmt = 'JPEG'
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+        buf = io.BytesIO()
+        save_kwargs = {'optimize': True}
+        if fmt == 'JPEG':
+            save_kwargs['quality'] = 82
+        img.save(buf, format=fmt, **save_kwargs)
+        ext = '.jpg' if fmt == 'JPEG' else '.png'
+        name = re.sub(r'\.[^.]+$', ext, image_field.name)
+        image_field.save(name, ContentFile(buf.getvalue()), save=False)
+    except Exception:
+        pass
 
 class Author(models.Model):
     name     = models.CharField(max_length=255, unique=True)
@@ -33,6 +65,7 @@ class Author(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)[:255]
         super().save(*args, **kwargs)
+        compress_image(self.headshot, max_px=600)
 
     def __str__(self):
         return self.name
@@ -125,9 +158,10 @@ class Article(models.Model):
                 self.short_title = "untitled"
 
         super().save(*args, **kwargs)
+        compress_image(self.preview_image)
+        compress_image(self.title_image)
 
     def __str__(self):
-        # Display volume/issue info and title
         return f"{self.title or 'Untitled'} (Vol {self.volume_number}, Issue {self.issue_number})"
 
     def get_absolute_url(self):

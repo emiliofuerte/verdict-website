@@ -8,6 +8,7 @@ from django.db.models import Case, When, Value, IntegerField
 def current_issue(request):
     articles = Article.objects.filter(is_current_issue=True)\
         .prefetch_related('authors')\
+        .defer('content_html')\
         .order_by("display_order", "title")
 
     latest_article = articles.first()
@@ -17,6 +18,7 @@ def current_issue(request):
 
     past_articles = Article.objects.filter(is_current_issue=False)\
         .prefetch_related('authors')\
+        .defer('content_html')\
         .order_by("-date", "-volume_number", "-issue_number")[:9]
 
     context = {
@@ -31,6 +33,7 @@ def current_issue(request):
 def past_issues(request):
     articles = Article.objects.filter(is_current_issue=False)\
         .prefetch_related('authors')\
+        .defer('content_html')\
         .order_by("-volume_number", "-issue_number", "title")
     grouped = defaultdict(lambda: defaultdict(list))
     for a in articles:
@@ -48,12 +51,12 @@ def past_issues(request):
     })
 
 def show_article(request, article_id):
-    article = get_object_or_404(Article, id=article_id)
+    article = get_object_or_404(Article.objects.prefetch_related('authors'), id=article_id)
     return render(request, 'newsletter/show_article.html', {"article": article})
 
 def show_article_by_volume_issue_title(request, volume_number, issue_number, short_title):
     article = get_object_or_404(
-        Article,
+        Article.objects.prefetch_related('authors'),
         volume_number=volume_number,
         issue_number=issue_number,
         short_title=short_title

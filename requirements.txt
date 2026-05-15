@@ -1,6 +1,7 @@
 django
 gunicorn
 pillow
+whitenoise
 argon2-cffi
 google-api-python-client
 google-auth
