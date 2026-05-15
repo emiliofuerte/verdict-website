@@ -29,7 +29,7 @@
 
     {% if article.preview_image %}
     <div class="text-center mb-4">
-      <img src="{{ article.preview_image.url }}" class="img-fluid" alt="{{ article.title }}"
+      <img src="{{ article.preview_image.url }}" class="img-fluid" loading="lazy" alt="{{ article.title }}"
         style="max-height: 250px; {% if not article.hide_image_border %}border: 1.5pt solid rgb(224, 220, 209);{% endif %}">
     </div>
     {% endif %}
@@ -62,7 +62,7 @@
 <a href="{{ article.get_absolute_url }}" style="text-decoration: none; color: inherit;">
   <div style="border: 1px solid #e0dcd1; border-radius: 4px; overflow: hidden; background: #ffffff; height: 100%; transition: box-shadow 0.15s;" onmouseover="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='none'">
     {% if article.preview_image %}
-    <img src="{{ article.preview_image.url }}" alt="{{ article.title }}" style="width: 100%; height: 140px; object-fit: cover;">
+    <img src="{{ article.preview_image.url }}" loading="lazy" alt="{{ article.title }}" style="width: 100%; height: 140px; object-fit: cover;">
     {% else %}
     <div style="width: 100%; height: 140px; background-color: #2B2D46; display: flex; align-items: center; justify-content: center; padding: 1rem;">
       <span style="color: white; font-size: 0.9rem; text-align: center;">{{ article.title }}</span>

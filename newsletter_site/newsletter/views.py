@@ -6,14 +6,18 @@ from collections import defaultdict
 from django.db.models import Case, When, Value, IntegerField
 
 def current_issue(request):
-    articles = Article.objects.filter(is_current_issue=True).order_by("display_order", "title")
+    articles = Article.objects.filter(is_current_issue=True)\
+        .prefetch_related('authors')\
+        .order_by("display_order", "title")
 
-    # Get the latest volume/issue/date from current articles
     latest_article = articles.first()
     volume = latest_article.volume_number if latest_article else 3
     issue = latest_article.issue_number if latest_article else 3
     date = latest_article.date if latest_article else None
-    past_articles = Article.objects.filter(is_current_issue=False).order_by("-date", "-volume_number", "-issue_number")[:9]
+
+    past_articles = Article.objects.filter(is_current_issue=False)\
+        .prefetch_related('authors')\
+        .order_by("-date", "-volume_number", "-issue_number")[:9]
 
     context = {
         "articles": articles,
@@ -25,9 +29,9 @@ def current_issue(request):
     return render(request, 'newsletter/current_issue.html', context)
 
 def past_issues(request):
-    articles = Article.objects.filter(is_current_issue=False).order_by(
-        "-volume_number", "-issue_number", "title"
-    )
+    articles = Article.objects.filter(is_current_issue=False)\
+        .prefetch_related('authors')\
+        .order_by("-volume_number", "-issue_number", "title")
     grouped = defaultdict(lambda: defaultdict(list))
     for a in articles:
         grouped[a.volume_number][a.issue_number].append(a)
@@ -61,13 +65,6 @@ def submissions(request):
 
 def join_our_team(request):
     return render(request, 'newsletter/join_our_team.html')
-
-def about_us(request):
-    # Fetch all authors for the contributors section
-    authors = Author.objects.order_by('name')
-    return render(request, 'newsletter/about_us.html', {
-        'authors': authors,
-    })
 
 def authors_index(request):
     """List all authors alphabetically."""
