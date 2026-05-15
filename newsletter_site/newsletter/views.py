@@ -79,7 +79,7 @@ def authors_index(request):
 def author_detail(request, slug):
     """Show an author's profile and their articles."""
     author = get_object_or_404(Author, slug=slug)
-    articles = author.articles.order_by(
+    articles = author.articles.defer('content_html').order_by(
         '-date', '-volume_number', '-issue_number', 'title'
     )
     return render(request, 'newsletter/author_detail.html', {
