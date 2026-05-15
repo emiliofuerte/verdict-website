@@ -23,6 +23,10 @@ GOOGLE_API_SCOPES = [
 # Look for credentials file - name doesn't matter as long as it ends in .json
 GOOGLE_CREDENTIALS_FILE = os.path.join(BASE_DIR, 'google-credentials.json')
 
+# Increase upload size limits for admin panel (articles with large content_html)
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB (in bytes)
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB (in bytes)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 

@@ -2,175 +2,157 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <!-- Google tag (gtag.js) -->
-   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GB5EPBSPRZ"></script>
-   <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GB5EPBSPRZ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-GB5EPBSPRZ");
+  </script>
 
-      gtag('config', 'G-GB5EPBSPRZ');
-   </script>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>THE VERDICT</title>
-  <!-- Bootstrap CSS -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  >
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="icon" type="image/png" href="{% static 'newsletter/logo.png' %}">
+
   <style>
     html, body {
-      height: 100%;
+      min-height: 100vh;
       margin: 0;
       display: flex;
       flex-direction: column;
     }
+    body {
+      font-family: "Times New Roman", Times, serif;
+      background-color: #ffffff;
+    }
+    a, a:hover, a:active, a:visited { color: black; text-decoration: underline; }
+    h1 { text-align: center; color: #1e2a4a; }
+    h2 { color: #9b9b9b; }
+
+    /* Site header */
+
+    #banner-section {
+      overflow: hidden;
+      transition: max-height 0.35s ease, opacity 0.3s ease;
+      max-height: 200px;
+      opacity: 1;
+    }
+    #banner-section a { display: block; text-decoration: none; }
+    #banner-section img {
+      width: 100%;
+      display: block;
+      max-height: 200px;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    #slim-nav { background-color: #ffffff; }
+
+    #slim-nav .nav-link {
+      color: black !important;
+      font-family: "Times New Roman", Times, serif;
+      letter-spacing: 0.06em;
+      font-size: 0.85rem;
+      text-decoration: none;
+    }
+    #slim-nav .nav-link:hover { text-decoration: underline; }
+    #slim-nav .navbar-toggler { border-color: rgba(0,0,0,0.2); }
+
+    body.scrolled #banner-section { max-height: 0; opacity: 0; }
+
+    /* Main content */
     .content-container {
       flex: 1;
       margin: 2rem auto;
       max-width: 800px;
+      padding: 0 1rem;
+      overflow-x: hidden;
     }
-    /* Styling */
-    body {
-      font-family: "Times New Roman", Times, serif;
-      background-color: #fffff2;
-    }
-    a, a:hover, a:active, a:visited {
-      color: black;
-      text-decoration: underline;
-    }
-    .navbar-nav .nav-link {
-      color: black;
-    }
-    h1 {
-      text-align: center;
-      color: #3d4067;
-    }
-    h2 {
-      color: #9b9b9b;
-    }
-    /* Sticky Footer */
+
+    /* Footer */
     .footer {
-      background-color: #f0eae2;
-      color: #8b7765;
+      background-color: #2B2D46;
+      color: #FFFFFF;
       padding: 4rem 1rem 1rem;
       text-align: center;
     }
-    .footer p {
-      margin: 0;
-    }
-    .footer .credit {
-      text-align: right;
-      font-size: 14px;
-      color: #c0b8ac;
-    }
-    .content-container {
-      flex: 1;
-      margin: 2rem auto;
-      max-width: 800px;
-      padding: 0 1rem; /* Add horizontal padding */
-    }
+    .footer p { margin: 0; }
+    .footer .credit { text-align: right; font-size: 14px; color: #FFFFFF; }
 
-    /* Article content styling */
+    /* Article content */
     .article-content {
       font-size: 20px;
       line-height: 1.6;
+      overflow-x: hidden;
+      overflow-wrap: break-word;
+      word-wrap: break-word; /* legacy alias, kept for older browsers */
     }
-
-    /* Images in article content */
     .article-content img {
-      max-width: 100%;
-      max-height: 500px;
-      height: auto;
-      width: auto;
-      display: block;
-      margin: 1.5rem auto;
-      border-radius: 4px;
-      object-fit: contain;
+      max-width: 100%; max-height: 500px;
+      height: auto; width: auto;
+      display: block; margin: 1.5rem auto;
+      border-radius: 4px; object-fit: contain;
     }
-
-    /* Image captions (paragraph immediately after image) */
     .article-content img + p {
-      text-align: center;
-      font-size: 14px;
-      color: #666;
-      font-style: italic;
-      margin-top: -1rem;
-      margin-bottom: 2rem;
+      text-align: center; font-size: 14px; color: #666;
+      font-style: italic; margin-top: -1rem; margin-bottom: 2rem;
     }
-
-    /* Footnotes styling */
     .article-content .footnotes {
-      margin-top: 2.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #ccc;
-      font-size: 16px;
+      margin-top: 2.5rem; padding-top: 1.5rem;
+      border-top: 1px solid #ccc; font-size: 16px;
     }
-
-    /* Superscript links */
-    .article-content sup {
-      font-size: 0.7em;
+    .article-content sup { font-size: 0.7em; }
+    .article-content sup a { text-decoration: none; padding: 0 2px; }
+    .article-content table {
+      max-width: 100%; width: 100%;
+      table-layout: fixed; overflow-wrap: break-word;
     }
-
-    .article-content sup a {
-      text-decoration: none;
-      padding: 0 2px;
-    }
+    .article-content td, .article-content th { overflow-wrap: break-word; }
+    .article-content a { word-break: break-all; }
   </style>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  {% block extra_css %}{% endblock %}
 </head>
 <body>
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-md navbar-light py-2 sticky-top" style="background-color: #fffff2;">
-    <div class="container justify-content-center">
-      <a class="navbar-brand mx-3" href="{% url 'current_issue' %}" style="color: rgb(133, 114, 108); font-style: italic; font-size: 1.5rem;">
-      THE COLUMBIA LAW VERDICT
+
+  <header id="site-header">
+    <div id="banner-section">
+      <a href="{% url 'current_issue' %}">
+        <img src="{% static 'newsletter/banner.png' %}" alt="Columbia Law Verdict">
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
-        <ul class="navbar-nav text-center">
-          <li class="nav-item mx-2">
-            <a class="nav-link" href="{% url 'past_issues' %}">PAST ISSUES</a>
-          </li>
-          <li class="nav-item mx-2">
-            <a class="nav-link" href="{% url 'submissions' %}">SUBMISSIONS</a>
-          </li>
-          <li class="nav-item mx-2">
-            <a class="nav-link" href="{% url 'join_our_team' %}">JOIN OUR TEAM</a>
-          </li>
-          <li class="nav-item mx-2">
-            <a class="nav-link" href="{% url 'about_us' %}">ABOUT US</a>
-          </li>
-        </ul>
-      </div>
     </div>
-  </nav>
+    <nav id="slim-nav" class="navbar navbar-expand-md py-1">
+      <div class="container justify-content-center">
+<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+          <ul class="navbar-nav text-center">
+            <li class="nav-item mx-2"><a class="nav-link" href="{% url 'past_issues' %}">PAST ISSUES</a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="{% url 'submissions' %}">SUBMISSIONS</a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="{% url 'join_our_team' %}">JOIN OUR TEAM</a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="{% url 'about_us' %}">ABOUT US</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
 
-  <!-- PAGE CONTENT -->
   <div class="content-container">
     {% block content %}{% endblock %}
   </div>
 
-  <!-- Footer -->
   <footer class="footer mt-auto">
     <p><i>The Verdict</i> is a student-run newsletter devoted to building community at CLS.</p><br>
     <p class="credit">
-        Artwork by Angel Mai &rsquo;27<br>
-      <a href="https://github.com/emiliofuerte/verdict-website"
-   style="font-size: 14px; color: #c0b8ac;">
-  Site built</a> by Daniel Bugingo &rsquo;26
+      Artwork by Angel Mai &rsquo;27<br>
+      <a href="https://github.com/emiliofuerte/verdict-website" style="font-size: 14px; color: #FFFFFF;">Site built</a> by Daniel Bugingo &rsquo;26
     </p>
   </footer>
 
-  <!-- Bootstrap JS -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

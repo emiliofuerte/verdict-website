@@ -66,6 +66,7 @@ class ArticleAdmin(admin.ModelAdmin):
                 "authors",
                 "preview_text",
                 "preview_image",
+                "hide_image_border",
                 "date",
                 "article_type",
                 "volume_number",

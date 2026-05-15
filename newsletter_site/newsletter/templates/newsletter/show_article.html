@@ -1,22 +1,32 @@
 {% extends "newsletter/base.html" %}
 {% block title %}{{ article.title }}{% endblock %}
 {% block content %}
+
 {% if article.title_image %}
 <div style="text-align: center;">
   <img src="{{ article.title_image.url }}" alt="{{ article.title }}" style="max-height: 150px; border: 1.5pt solid rgb(224, 220, 209);">
 </div>
 {% else %}
-<h3 style="text-align: center;">{{ article.title }}</h3>
+<div style="background-color: #1e2a4a; padding: 0.6rem 1rem; text-align: center; border-radius: 3px; margin-bottom: 1rem;">
+  <h3 style="color: white; margin: 0;">{{ article.title }}</h3>
+  <div style="color: rgba(255,255,255,0.75); font-size: 16px; margin-top: 0.3rem;">
+    by
+    {% for author in article.authors.all %}
+      <a href="{% url "author_detail" author.slug %}" style="color: rgba(255,255,255,0.75);">{{ author.name }}</a>{% if not forloop.last %}, {% endif %}
+    {% empty %}
+      {{ article.writer }}
+    {% endfor %}
+    &mdash; <em>{{ article.date }}</em>
+  </div>
+</div>
 {% endif %}
-  <p style="font-size: 16px;">
-    <strong>by
-      {% for author in article.authors.all %}
-        <a href="{% url 'author_detail' author.slug %}">{{ author.name }}</a>{% if not forloop.last %}, {% endif %}
-      {% empty %}
-        {{ article.writer }}
-      {% endfor %}
-    </strong><br>
-    <em>{{ article.date }}</em>
-  </p>
-  <div class="article-content">{{ article.content_html|safe }}</div>
+
+{% if article.preview_image %}
+<div class="text-center mb-4">
+  <img src="{{ article.preview_image.url }}" class="img-fluid" alt="{{ article.title }}"
+    style="max-height: 350px; {% if not article.hide_image_border %}border: 1.5pt solid rgb(224, 220, 209);{% endif %}">
+</div>
+{% endif %}
+
+<div class="article-content">{{ article.content_html|safe }}</div>
 {% endblock %}

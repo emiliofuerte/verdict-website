@@ -72,6 +72,8 @@ class Article(models.Model):
         help_text="Image to show on the current issue homepage"
     )
 
+    hide_image_border = models.BooleanField(default=False)
+
     # Display order for current issue page
     display_order = models.IntegerField(
         default=0,
