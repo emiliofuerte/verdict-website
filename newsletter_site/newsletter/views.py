@@ -16,17 +16,11 @@ def current_issue(request):
     issue = latest_article.issue_number if latest_article else 3
     date = latest_article.date if latest_article else None
 
-    past_articles = Article.objects.filter(is_current_issue=False)\
-        .prefetch_related('authors')\
-        .defer('content_html')\
-        .order_by("-date", "-volume_number", "-issue_number")[:9]
-
     context = {
         "articles": articles,
         "volume": volume,
         "issue": issue,
         "date": date,
-        "past_articles": past_articles,
     }
     return render(request, 'newsletter/current_issue.html', context)
 

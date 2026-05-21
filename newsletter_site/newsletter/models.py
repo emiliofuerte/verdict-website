@@ -64,8 +64,10 @@ class Author(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)[:255]
+        old_headshot = Author.objects.filter(pk=self.pk).values_list('headshot', flat=True).first() if self.pk else None
         super().save(*args, **kwargs)
-        compress_image(self.headshot, max_px=600)
+        if self.headshot and self.headshot.name != old_headshot:
+            compress_image(self.headshot, max_px=600)
 
     def __str__(self):
         return self.name
@@ -138,28 +140,35 @@ class Article(models.Model):
     doc_id       = models.CharField(max_length=255, blank=True, help_text="Auto-extracted from doc_url")
     content_html = models.TextField(blank=True, help_text="Fetched HTML content from Google Docs.")
 
-    is_current_issue = models.BooleanField(default=False)
+    is_current_issue = models.BooleanField(default=False, db_index=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
-        # If we have a doc_url but no doc_id, extract it:
         if self.doc_url and not self.doc_id:
             match = DOC_URL_REGEX.search(self.doc_url)
             if match:
                 self.doc_id = match.group(1)
 
-        # Ensure short_title is never empty
         if not self.short_title:
             if self.title and self.title.strip():
                 self.short_title = slugify(self.title)[:100]
             else:
                 self.short_title = "untitled"
 
+        if self.pk:
+            old = Article.objects.filter(pk=self.pk).values_list('preview_image', 'title_image').first()
+            old_preview, old_title = old if old else (None, None)
+        else:
+            old_preview = old_title = None
+
         super().save(*args, **kwargs)
-        compress_image(self.preview_image)
-        compress_image(self.title_image)
+
+        if self.preview_image and self.preview_image.name != old_preview:
+            compress_image(self.preview_image)
+        if self.title_image and self.title_image.name != old_title:
+            compress_image(self.title_image)
 
     def __str__(self):
         return f"{self.title or 'Untitled'} (Vol {self.volume_number}, Issue {self.issue_number})"
